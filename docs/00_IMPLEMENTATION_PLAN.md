@@ -1,7 +1,9 @@
 # 00 — Master Implementation Plan
 
-STATUS: **Planned** — architecture decisions resolved (§9.1). Awaiting approval for Feature 01.
-No application code written yet.
+STATUS: **COMPLETE** — F01–F10 all implemented, tested, and documented. 382/382 tests
+passing offline (`docs/FINAL_VALIDATION.md`), 17/17 functional requirements PASS
+(`docs/FINAL_REQUIREMENT_AUDIT.md`). Only DL-1 (clicking "Deploy" on Streamlit Community
+Cloud with the repo owner's own account) remains, per `docs/features/10_DEPLOY_DOCS.md` §7.
 
 Source of truth: [PROBLEM-STATEMENT.md](../PROBLEM-STATEMENT.md).
 Measured data evidence: [DATA_PROFILE.md](DATA_PROFILE.md).
