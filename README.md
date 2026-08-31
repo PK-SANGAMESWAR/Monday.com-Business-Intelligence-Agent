@@ -77,6 +77,27 @@ Fill in `.env`:
 Everything else (`MONDAY_API_URL`, `BI_AGENT_MODEL`, `CACHE_TTL_SECONDS`, …) has a sane
 default — see `.env.example` and `bi_agent/config.py`.
 
+### Testing without an Anthropic key (local Ollama)
+
+No `ANTHROPIC_API_KEY` yet? Set `LLM_PROVIDER=ollama` in `.env` to run the same agent
+against a local model instead — nothing else in the codebase changes:
+
+```bash
+ollama serve                 # if not already running
+ollama pull qwen2.5:7b       # any tool-calling-capable model works (llama3.1, qwen2.5, …)
+```
+
+```env
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen2.5:7b
+```
+
+Once an Anthropic key is issued, set `LLM_PROVIDER=anthropic` (or remove the line) and fill
+in `ANTHROPIC_API_KEY` — that one variable is the entire switch back. See
+`bi_agent/agent/ollama_client.py` and the Decision Log for how the two backends stay
+interchangeable.
+
 ## monday.com board setup
 
 The two monday.com boards do not exist by default — the `.xlsx` files are the only copy

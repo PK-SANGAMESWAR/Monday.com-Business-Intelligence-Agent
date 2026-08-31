@@ -320,6 +320,85 @@ def test_config_error_names_where_to_get_the_token() -> None:
     assert "My Access Tokens" in str(excinfo.value)
 
 
+# --- LLM backend selection ----------------------------------------------------
+
+
+def test_llm_provider_defaults_to_anthropic(monday_token: str) -> None:
+    settings = load_settings()
+    assert settings.llm_provider == "anthropic"
+    assert settings.llm_model == settings.model
+
+
+def test_llm_provider_ollama_selects_ollama_model(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "ollama")
+
+    settings = load_settings()
+
+    assert settings.llm_provider == "ollama"
+    assert settings.llm_model == "llama3.1"
+    assert settings.ollama_base_url == "http://localhost:11434"
+
+
+def test_llm_provider_is_case_insensitive(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "OLLAMA")
+    assert load_settings().llm_provider == "ollama"
+
+
+def test_invalid_llm_provider_raises_config_error(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
+
+    with pytest.raises(ConfigError) as excinfo:
+        load_settings()
+
+    assert "LLM_PROVIDER" in str(excinfo.value)
+
+
+def test_ollama_model_and_base_url_are_overridable(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "ollama")
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://gpu-box:11434")
+    monkeypatch.setenv("OLLAMA_MODEL", "qwen2.5")
+
+    settings = load_settings()
+
+    assert settings.ollama_base_url == "http://gpu-box:11434"
+    assert settings.llm_model == "qwen2.5"
+
+
+def test_ollama_timeout_defaults_higher_than_monday_http_timeout(monday_token: str) -> None:
+    """A local model's first response (cold weights, no GPU) routinely exceeds
+    monday.com's 30s HTTP timeout, so the two must not share one setting."""
+    settings = load_settings()
+    assert settings.ollama_timeout_seconds == 120.0
+    assert settings.ollama_timeout_seconds > settings.http_timeout_seconds
+
+
+def test_ollama_timeout_is_overridable(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("OLLAMA_TIMEOUT_SECONDS", "45")
+    assert load_settings().ollama_timeout_seconds == 45.0
+
+
+def test_switching_provider_back_to_anthropic_does_not_need_ollama_vars_unset(
+    monday_token: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The whole point: flipping one variable is enough to switch back."""
+    monkeypatch.setenv("LLM_PROVIDER", "ollama")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", FAKE_ANTHROPIC_KEY)
+    assert load_settings().llm_model == "llama3.1"
+
+    monkeypatch.setenv("LLM_PROVIDER", "anthropic")
+    assert load_settings().llm_model == "claude-sonnet-5"
+
+
 def test_config_error_reports_every_problem_at_once(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

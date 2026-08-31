@@ -147,6 +147,43 @@ def test_loop_that_never_converges_raises_llm_error(agent_factory):
     assert len(client.messages.calls) == MAX_TOOL_ITERATIONS
 
 
+def test_build_client_uses_ollama_client_when_provider_is_ollama(
+    board_repository, settings_factory
+):
+    """No ANTHROPIC_API_KEY needed at all when LLM_PROVIDER=ollama - the whole point of
+    the local-testing path (`bi_agent/agent/ollama_client.py`)."""
+    from bi_agent.agent.ollama_client import OllamaClient
+
+    settings = settings_factory(llm_provider="ollama", ollama_base_url="http://localhost:11434")
+    assert settings.anthropic_api_key is None
+
+    agent = Agent(board_repository, settings)
+
+    assert isinstance(agent._client, OllamaClient)
+
+
+def test_build_client_still_requires_anthropic_key_for_anthropic_provider(
+    board_repository, settings_factory
+):
+    settings = settings_factory(llm_provider="anthropic")
+
+    with pytest.raises(LLMError):
+        Agent(board_repository, settings)
+
+
+def test_call_model_sends_ollama_model_tag_when_provider_is_ollama(
+    board_repository, settings_factory
+):
+    settings = settings_factory(llm_provider="ollama", ollama_model="qwen2.5")
+    agent = Agent(board_repository, settings)
+    client = FakeClient([FakeResponse([FakeBlock("text", text="hi")])])
+    agent._client = client
+
+    agent.ask("hello")
+
+    assert client.messages.calls[0]["model"] == "qwen2.5"
+
+
 def test_second_ask_continues_the_same_conversation(agent_factory):
     agent, client = agent_factory(
         [

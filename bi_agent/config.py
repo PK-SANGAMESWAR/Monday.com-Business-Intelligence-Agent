@@ -41,6 +41,9 @@ MIN_TOKEN_LENGTH = 20
 
 _VALID_LOG_LEVELS = frozenset(logging.getLevelNamesMapping())
 
+#: The only two backends `bi_agent/agent/loop.py` knows how to build a client for.
+_VALID_LLM_PROVIDERS = frozenset({"anthropic", "ollama"})
+
 #: How to obtain each credential, appended to the ConfigError message. Being
 #: told "MONDAY_API_KEY is not set" without being told where to get one is only
 #: half an error message.
@@ -95,6 +98,19 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("BI_AGENT_MODEL", "MODEL"),
     )
 
+    # --- LLM backend selection ---
+    # Lets F06 run against a local Ollama daemon when no Anthropic key is
+    # available (e.g. evaluating the agent before an API key is issued), with a
+    # one-variable switch back to Anthropic once one is. Never affects which
+    # tools run or how figures are computed - only who is asked to narrate them.
+    llm_provider: str = Field(default="anthropic")
+    ollama_base_url: str = Field(default="http://localhost:11434")
+    ollama_model: str = Field(default="llama3.1")
+    # A local model's first response (loading weights, no GPU) routinely exceeds
+    # monday.com's 30s HTTP timeout, so this is its own setting rather than
+    # reusing `http_timeout_seconds`.
+    ollama_timeout_seconds: float = Field(default=120.0, gt=0)
+
     # --- behaviour ---
     cache_ttl_seconds: int = Field(default=300, ge=0)
     http_timeout_seconds: float = Field(default=30.0, gt=0)
@@ -143,10 +159,21 @@ class Settings(BaseSettings):
             return None
         return value
 
-    @field_validator("monday_api_url", "monday_api_version", mode="before")
+    @field_validator("monday_api_url", "monday_api_version", "ollama_base_url", "ollama_model", mode="before")
     @classmethod
     def _strip(cls, value: Any) -> Any:
         return value.strip() if isinstance(value, str) else value
+
+    @field_validator("llm_provider", mode="before")
+    @classmethod
+    def _validate_llm_provider(cls, value: Any) -> Any:
+        if not isinstance(value, str):
+            return value
+        provider = value.strip().lower()
+        if provider not in _VALID_LLM_PROVIDERS:
+            valid = ", ".join(sorted(_VALID_LLM_PROVIDERS))
+            raise ValueError(f"must be one of: {valid}")
+        return provider
 
     @field_validator("log_level", mode="before")
     @classmethod
@@ -165,6 +192,11 @@ class Settings(BaseSettings):
     def has_anthropic_key(self) -> bool:
         """F06 needs this; F01-F05 run happily without it."""
         return self.anthropic_api_key is not None
+
+    @property
+    def llm_model(self) -> str:
+        """The model tag to send to whichever backend `llm_provider` selects."""
+        return self.ollama_model if self.llm_provider == "ollama" else self.model
 
     @property
     def boards_configured(self) -> bool:

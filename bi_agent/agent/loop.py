@@ -1,9 +1,12 @@
-"""The Anthropic tool-use loop: conversation state, tool dispatch, degradation.
+"""The tool-use loop: conversation state, tool dispatch, degradation.
 
 `client` is the same injection point F02's `MondayClient` and F03's `SeedWriter` use for
-their HTTP transports (`http_client=...`) - here it is the Anthropic SDK client itself,
-so `Agent` is fully testable with a stub that returns canned `messages.create` responses
-and never touches the network or a real API key (plan section 8's "stubbed LLM" tests).
+their HTTP transports (`http_client=...`) - here it is either the Anthropic SDK client or
+`bi_agent.agent.ollama_client.OllamaClient` (selected by `Settings.llm_provider`), both of
+which expose the same `.messages.create(...)` shape. That lets `Agent` be fully testable
+with a stub that returns canned `messages.create` responses and never touches the network
+or a real API key (plan section 8's "stubbed LLM" tests), and lets the agent run against a
+local model before an ANTHROPIC_API_KEY exists.
 """
 
 from __future__ import annotations
@@ -59,12 +62,21 @@ class Agent:
         self._messages: list[dict[str, Any]] = []
 
     def _build_client(self) -> _AnthropicLike:
+        if self.settings.llm_provider == "ollama":
+            from bi_agent.agent.ollama_client import OllamaClient
+
+            return OllamaClient(
+                base_url=self.settings.ollama_base_url,
+                timeout=self.settings.ollama_timeout_seconds,
+            )
+
         if not self.settings.has_anthropic_key:
             raise LLMError(
                 "ANTHROPIC_API_KEY is not set",
                 user_message=(
                     "The reasoning service is not configured, so I cannot answer yet. "
-                    "Set ANTHROPIC_API_KEY and restart."
+                    "Set ANTHROPIC_API_KEY and restart, or set LLM_PROVIDER=ollama to "
+                    "use a local model instead."
                 ),
             )
         import anthropic
@@ -121,7 +133,7 @@ class Agent:
     def _call_model(self) -> Any:
         try:
             return self._client.messages.create(
-                model=self.settings.model,
+                model=self.settings.llm_model,
                 max_tokens=MAX_RESPONSE_TOKENS,
                 system=SYSTEM_PROMPT,
                 tools=TOOL_SCHEMAS,
@@ -129,6 +141,6 @@ class Agent:
             )
         except LLMError:
             raise
-        except Exception as exc:  # the Anthropic SDK's own exception hierarchy
-            logger.error("Anthropic API call failed: %s", exc)
-            raise LLMError(f"Anthropic API call failed: {exc}") from exc
+        except Exception as exc:  # the Anthropic SDK's / Ollama adapter's own exceptions
+            logger.error("LLM API call failed: %s", exc)
+            raise LLMError(f"LLM API call failed: {exc}") from exc
