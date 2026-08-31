@@ -28,6 +28,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+import httpx
 import pytest
 
 from bi_agent.config import Settings, reset_settings_cache
@@ -197,3 +198,91 @@ def monday_client_factory(
 
     for client in created:
         client.close()
+
+
+# --- F04: normalized-board fixtures, built from the live-recorded boards -----------------
+
+LIVE_FIXTURE_DIR = FIXTURE_DIR / "live"
+
+
+def _board_snapshot_from_live_fixture(name: str, *, respx_mock, settings_factory, recorded_sleep):
+    """A real `BoardSnapshot` built from a recording of the actual seeded board
+    (`scripts/record_fixtures.py --board ...`, F04 plan section 5 step 1), routed through
+    `MondayClient`/`BoardReader` exactly as production code does — the only thing mocked
+    is the transport.
+    """
+    from bi_agent.monday.boards import BoardReader
+    from bi_agent.monday.client import MondayClient
+
+    payload = json.loads((LIVE_FIXTURE_DIR / name).read_text(encoding="utf-8"))
+    board_name = payload["data"]["boards"][0]["name"]
+
+    settings = settings_factory()
+    route = respx_mock.post(settings.monday_api_url)
+    route.mock(return_value=httpx.Response(200, json=payload))
+    client = MondayClient(settings, sleep=recorded_sleep, jitter=lambda: 1.0)
+    snapshot = BoardReader(client).fetch_items(board_name)
+    client.close()
+    return snapshot
+
+
+@pytest.fixture
+def deals_snapshot(respx_mock, settings_factory, recorded_sleep):
+    return _board_snapshot_from_live_fixture(
+        "deals_board_items.json",
+        respx_mock=respx_mock,
+        settings_factory=settings_factory,
+        recorded_sleep=recorded_sleep,
+    )
+
+
+@pytest.fixture
+def work_orders_snapshot(respx_mock, settings_factory, recorded_sleep):
+    return _board_snapshot_from_live_fixture(
+        "work_orders_board_items.json",
+        respx_mock=respx_mock,
+        settings_factory=settings_factory,
+        recorded_sleep=recorded_sleep,
+    )
+
+
+@pytest.fixture
+def board_repository(respx_mock, settings_factory, recorded_sleep, fake_clock):
+    """A real `BoardRepository`, routed to both live-recorded boards.
+
+    `LIST_BOARDS` returns the real account listing (both boards present);
+    `BOARD_ITEMS_FIRST` is routed by the requested board id to whichever recording
+    matches - the same two-board account F06's tools need to answer against either
+    `describe_data("deals")` or `describe_data("work_orders")`.
+    """
+    from bi_agent.data.repository import BoardRepository
+    from bi_agent.monday.boards import BoardReader
+    from bi_agent.monday.client import MondayClient
+
+    list_boards = json.loads((LIVE_FIXTURE_DIR / "list_boards.json").read_text(encoding="utf-8"))
+    deals_payload = json.loads((LIVE_FIXTURE_DIR / "deals_board_items.json").read_text(encoding="utf-8"))
+    wo_payload = json.loads((LIVE_FIXTURE_DIR / "work_orders_board_items.json").read_text(encoding="utf-8"))
+    by_board_id = {
+        deals_payload["data"]["boards"][0]["id"]: deals_payload,
+        wo_payload["data"]["boards"][0]["id"]: wo_payload,
+    }
+
+    def _handle(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        query, variables = body["query"], body.get("variables") or {}
+        if "ListBoards" in query:
+            return httpx.Response(200, json=list_boards)
+        if "BoardItemsFirst" in query:
+            board_id = str(variables["boardIds"][0])
+            return httpx.Response(200, json=by_board_id[board_id])
+        raise AssertionError(f"unhandled query in board_repository fixture: {query[:80]!r}")
+
+    settings = settings_factory()
+    respx_mock.post(settings.monday_api_url).mock(side_effect=_handle)
+    client = MondayClient(settings, sleep=recorded_sleep, jitter=lambda: 1.0)
+    reader = BoardReader(client, now=fake_clock)
+    repo = BoardRepository(reader, now=fake_clock)
+
+    yield repo
+
+    client.close()

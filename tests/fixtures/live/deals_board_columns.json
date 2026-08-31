@@ -1,0 +1,77 @@
+{
+  "data": {
+    "boards": [
+      {
+        "id": "5030996376",
+        "name": "Deals",
+        "columns": [
+          {
+            "id": "name",
+            "title": "Name",
+            "type": "name"
+          },
+          {
+            "id": "text_mm6r6g8z",
+            "title": "Owner code",
+            "type": "text"
+          },
+          {
+            "id": "text_mm6rvebe",
+            "title": "Client Code",
+            "type": "text"
+          },
+          {
+            "id": "text_mm6r2y27",
+            "title": "Deal Status",
+            "type": "text"
+          },
+          {
+            "id": "date_mm6rzwnr",
+            "title": "Close Date (A)",
+            "type": "date"
+          },
+          {
+            "id": "text_mm6r1jkj",
+            "title": "Closure Probability",
+            "type": "text"
+          },
+          {
+            "id": "numeric_mm6r3w6g",
+            "title": "Masked Deal value",
+            "type": "numbers"
+          },
+          {
+            "id": "date_mm6rrmsp",
+            "title": "Tentative Close Date",
+            "type": "date"
+          },
+          {
+            "id": "text_mm6rcxk8",
+            "title": "Deal Stage",
+            "type": "text"
+          },
+          {
+            "id": "text_mm6rsgnz",
+            "title": "Product deal",
+            "type": "text"
+          },
+          {
+            "id": "text_mm6r8x2a",
+            "title": "Sector/service",
+            "type": "text"
+          },
+          {
+            "id": "date_mm6r8myk",
+            "title": "Created Date",
+            "type": "date"
+          },
+          {
+            "id": "text_mm6rc5bq",
+            "title": "Source Row",
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  }
+}

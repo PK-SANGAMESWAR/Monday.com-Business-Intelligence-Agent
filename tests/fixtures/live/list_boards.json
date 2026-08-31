@@ -2,6 +2,14 @@
   "data": {
     "boards": [
       {
+        "id": "5030996553",
+        "name": "Work Orders"
+      },
+      {
+        "id": "5030996376",
+        "name": "Deals"
+      },
+      {
         "id": "5030991691",
         "name": "Build Vibe app"
       },

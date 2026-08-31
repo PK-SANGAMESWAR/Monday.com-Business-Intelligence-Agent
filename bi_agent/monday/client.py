@@ -368,7 +368,14 @@ class MondayClient:
             ) from exc
 
         elapsed_ms = (time.perf_counter() - started) * 1000
-        body = self._decode(response, document, rid)
+        # A non-2xx response is classified by status code alone, so decoding
+        # tolerates a body that is not JSON at all: a WAF or CDN in front of
+        # the API answers a 429/5xx with an HTML page, not a GraphQL error
+        # envelope, and that must still map to a retryable error rather than
+        # a permanent MondayQueryError - otherwise backoff never engages
+        # against exactly the failure it exists for. A 200 is held to the
+        # strict contract, since a success is only a success if it parses.
+        body = self._decode(response, document, rid, strict=response.status_code == 200)
         failure = classify_failure(response, body, document_name=document.name)
 
         if failure is not None:
@@ -391,13 +398,22 @@ class MondayClient:
         return data
 
     def _decode(
-        self, response: httpx.Response, document: QueryDocument, rid: str
+        self,
+        response: httpx.Response,
+        document: QueryDocument,
+        rid: str,
+        *,
+        strict: bool = True,
     ) -> Any:
         """Parse the body, tolerating one that is not JSON at all.
 
         A reverse proxy in front of the API will happily return an HTML error
         page with a 200, and a JSON traceback is not an acceptable answer to a
-        founder's question.
+        founder's question. That case (``strict=True``, the default) still
+        raises directly, since a 200 with an unparseable body has no status
+        code for :func:`classify_failure` to key on. A non-2xx response
+        (``strict=False``) instead returns ``None`` and lets the status code
+        drive classification - see the call site in :meth:`_attempt`.
         """
         try:
             return response.json()
@@ -409,6 +425,8 @@ class MondayClient:
                 response.text[:BODY_LOG_LIMIT],
                 extra={"request_id": rid},
             )
+            if not strict:
+                return None
             raise MondayQueryError(
                 f"monday.com returned a body that is not JSON for {document.name} "
                 f"(HTTP {response.status_code})"
