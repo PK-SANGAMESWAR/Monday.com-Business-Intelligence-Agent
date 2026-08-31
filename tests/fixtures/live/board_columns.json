@@ -1,0 +1,37 @@
+{
+  "data": {
+    "boards": [
+      {
+        "id": "2075326943",
+        "name": "Your first board",
+        "columns": [
+          {
+            "id": "name",
+            "title": "Name",
+            "type": "name"
+          },
+          {
+            "id": "subitems",
+            "title": "Subitems",
+            "type": "subtasks"
+          },
+          {
+            "id": "person",
+            "title": "Person",
+            "type": "people"
+          },
+          {
+            "id": "status",
+            "title": "Status",
+            "type": "status"
+          },
+          {
+            "id": "date4",
+            "title": "Date",
+            "type": "date"
+          }
+        ]
+      }
+    ]
+  }
+}

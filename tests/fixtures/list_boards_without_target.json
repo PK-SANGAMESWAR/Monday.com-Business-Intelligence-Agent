@@ -1,0 +1,15 @@
+{
+  "data": {
+    "boards": [
+      {
+        "id": "1111111111",
+        "name": "Your first board"
+      },
+      {
+        "id": "1111111112",
+        "name": "Subitems of Your first board"
+      }
+    ]
+  },
+  "account_id": 83990706
+}

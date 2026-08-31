@@ -1,0 +1,184 @@
+{
+  "data": {
+    "complexity": {
+      "before": 989970,
+      "after": 989870,
+      "query": 100
+    },
+    "boards": [
+      {
+        "id": "9876543210",
+        "name": "Deals",
+        "columns": [
+          {
+            "id": "name",
+            "title": "Deal Name",
+            "type": "name"
+          },
+          {
+            "id": "subitems",
+            "title": "Subitems",
+            "type": "subtasks"
+          },
+          {
+            "id": "status",
+            "title": "Deal Status",
+            "type": "status"
+          },
+          {
+            "id": "dropdown_mkq1sect",
+            "title": "Sector/service",
+            "type": "dropdown"
+          },
+          {
+            "id": "numeric_mkq1val",
+            "title": "Deal Value",
+            "type": "numbers"
+          },
+          {
+            "id": "date_mkq1crt",
+            "title": "Created Date",
+            "type": "date"
+          },
+          {
+            "id": "text_mkq1own",
+            "title": "Owner",
+            "type": "text"
+          }
+        ],
+        "items_page": {
+          "cursor": null,
+          "items": [
+            {
+              "id": "1001",
+              "name": "Sakura",
+              "column_values": [
+                {
+                  "id": "subitems",
+                  "type": "subtasks",
+                  "text": null,
+                  "value": null
+                },
+                {
+                  "id": "status",
+                  "type": "status",
+                  "text": "Won",
+                  "value": "{\"index\": 1, \"post_id\": null}"
+                },
+                {
+                  "id": "dropdown_mkq1sect",
+                  "type": "dropdown",
+                  "text": "Energy",
+                  "value": "{\"ids\": [1]}"
+                },
+                {
+                  "id": "numeric_mkq1val",
+                  "type": "numbers",
+                  "text": "1250000",
+                  "value": "\"1250000\""
+                },
+                {
+                  "id": "date_mkq1crt",
+                  "type": "date",
+                  "text": "2024-08-14",
+                  "value": "{\"date\": \"2024-08-14\"}"
+                },
+                {
+                  "id": "text_mkq1own",
+                  "type": "text",
+                  "text": "OWNER_001",
+                  "value": "\"OWNER_001\""
+                }
+              ]
+            },
+            {
+              "id": "1002",
+              "name": "Alphonse",
+              "column_values": [
+                {
+                  "id": "subitems",
+                  "type": "subtasks",
+                  "text": null,
+                  "value": null
+                },
+                {
+                  "id": "status",
+                  "type": "status",
+                  "text": "Won",
+                  "value": "{\"index\": 1, \"post_id\": null}"
+                },
+                {
+                  "id": "dropdown_mkq1sect",
+                  "type": "dropdown",
+                  "text": "Solar",
+                  "value": "{\"ids\": [1]}"
+                },
+                {
+                  "id": "numeric_mkq1val",
+                  "type": "numbers",
+                  "text": "",
+                  "value": null
+                },
+                {
+                  "id": "date_mkq1crt",
+                  "type": "date",
+                  "text": "2024-09-02",
+                  "value": "{\"date\": \"2024-09-02\"}"
+                },
+                {
+                  "id": "text_mkq1own",
+                  "type": "text",
+                  "text": "OWNER_002",
+                  "value": "\"OWNER_002\""
+                }
+              ]
+            },
+            {
+              "id": "1003",
+              "name": "Nezuko",
+              "column_values": [
+                {
+                  "id": "subitems",
+                  "type": "subtasks",
+                  "text": null,
+                  "value": null
+                },
+                {
+                  "id": "status",
+                  "type": "status",
+                  "text": "In Progress",
+                  "value": "{\"index\": 1, \"post_id\": null}"
+                },
+                {
+                  "id": "dropdown_mkq1sect",
+                  "type": "dropdown",
+                  "text": "Railways",
+                  "value": "{\"ids\": [1]}"
+                },
+                {
+                  "id": "numeric_mkq1val",
+                  "type": "numbers",
+                  "text": "75000",
+                  "value": "\"75000\""
+                },
+                {
+                  "id": "date_mkq1crt",
+                  "type": "date",
+                  "text": "2024-09-19",
+                  "value": "{\"date\": \"2024-09-19\"}"
+                },
+                {
+                  "id": "text_mkq1own",
+                  "type": "text",
+                  "text": "OWNER_001",
+                  "value": "\"OWNER_001\""
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "account_id": 83990706
+}

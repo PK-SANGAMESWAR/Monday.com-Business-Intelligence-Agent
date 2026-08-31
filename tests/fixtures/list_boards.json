@@ -1,0 +1,19 @@
+{
+  "data": {
+    "boards": [
+      {
+        "id": "9876543210",
+        "name": "Deals"
+      },
+      {
+        "id": "9876543211",
+        "name": "Work Orders"
+      },
+      {
+        "id": "1111111111",
+        "name": "Your first board"
+      }
+    ]
+  },
+  "account_id": 83990706
+}

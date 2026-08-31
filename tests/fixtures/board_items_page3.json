@@ -1,0 +1,99 @@
+{
+  "data": {
+    "complexity": {
+      "before": 989970,
+      "after": 989870,
+      "query": 100
+    },
+    "next_items_page": {
+      "cursor": null,
+      "items": [
+        {
+          "id": "1007",
+          "name": "Turtle",
+          "column_values": [
+            {
+              "id": "subitems",
+              "type": "subtasks",
+              "text": null,
+              "value": null
+            },
+            {
+              "id": "status",
+              "type": "status",
+              "text": "In Progress",
+              "value": "{\"index\": 1, \"post_id\": null}"
+            },
+            {
+              "id": "dropdown_mkq1sect",
+              "type": "dropdown",
+              "text": "DSP",
+              "value": "{\"ids\": [1]}"
+            },
+            {
+              "id": "numeric_mkq1val",
+              "type": "numbers",
+              "text": "425000",
+              "value": "\"425000\""
+            },
+            {
+              "id": "date_mkq1crt",
+              "type": "date",
+              "text": "2025-11-30",
+              "value": "{\"date\": \"2025-11-30\"}"
+            },
+            {
+              "id": "text_mkq1own",
+              "type": "text",
+              "text": "OWNER_005",
+              "value": "\"OWNER_005\""
+            }
+          ]
+        },
+        {
+          "id": "1008",
+          "name": "Golden fish",
+          "column_values": [
+            {
+              "id": "subitems",
+              "type": "subtasks",
+              "text": null,
+              "value": null
+            },
+            {
+              "id": "status",
+              "type": "status",
+              "text": "Won",
+              "value": "{\"index\": 1, \"post_id\": null}"
+            },
+            {
+              "id": "dropdown_mkq1sect",
+              "type": "dropdown",
+              "text": "Manufacturing",
+              "value": "{\"ids\": [1]}"
+            },
+            {
+              "id": "numeric_mkq1val",
+              "type": "numbers",
+              "text": "98000",
+              "value": "\"98000\""
+            },
+            {
+              "id": "date_mkq1crt",
+              "type": "date",
+              "text": "2026-01-15",
+              "value": "{\"date\": \"2026-01-15\"}"
+            },
+            {
+              "id": "text_mkq1own",
+              "type": "text",
+              "text": "OWNER_006",
+              "value": "\"OWNER_006\""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "account_id": 83990706
+}

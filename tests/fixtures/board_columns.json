@@ -1,0 +1,48 @@
+{
+  "data": {
+    "boards": [
+      {
+        "id": "9876543210",
+        "name": "Deals",
+        "columns": [
+          {
+            "id": "name",
+            "title": "Deal Name",
+            "type": "name"
+          },
+          {
+            "id": "subitems",
+            "title": "Subitems",
+            "type": "subtasks"
+          },
+          {
+            "id": "status",
+            "title": "Deal Status",
+            "type": "status"
+          },
+          {
+            "id": "dropdown_mkq1sect",
+            "title": "Sector/service",
+            "type": "dropdown"
+          },
+          {
+            "id": "numeric_mkq1val",
+            "title": "Deal Value",
+            "type": "numbers"
+          },
+          {
+            "id": "date_mkq1crt",
+            "title": "Created Date",
+            "type": "date"
+          },
+          {
+            "id": "text_mkq1own",
+            "title": "Owner",
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  },
+  "account_id": 83990706
+}

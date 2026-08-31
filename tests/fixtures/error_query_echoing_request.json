@@ -1,0 +1,7 @@
+{
+  "errors": [
+    {
+      "message": "Invalid request. Headers received: {'Authorization': 'TOKEN_PLACEHOLDER', 'API-Version': '2024-10'}"
+    }
+  ]
+}

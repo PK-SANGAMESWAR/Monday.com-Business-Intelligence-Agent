@@ -1,0 +1,14 @@
+{
+  "errors": [
+    {
+      "message": "Field 'nonsense' doesn't exist on type 'Board'",
+      "locations": [
+        {
+          "line": 3,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "account_id": 83990706
+}

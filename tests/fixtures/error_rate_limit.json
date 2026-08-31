@@ -1,0 +1,9 @@
+{
+  "errors": [
+    {
+      "message": "Rate Limit Exceeded"
+    }
+  ],
+  "error_code": "RateLimitExceeded",
+  "status_code": 429
+}

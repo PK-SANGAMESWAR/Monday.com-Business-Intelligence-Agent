@@ -1,0 +1,141 @@
+{
+  "data": {
+    "complexity": {
+      "before": 989970,
+      "after": 989870,
+      "query": 100
+    },
+    "next_items_page": {
+      "cursor": "CURSOR_PAGE_3",
+      "items": [
+        {
+          "id": "1004",
+          "name": "Dolphin",
+          "column_values": [
+            {
+              "id": "subitems",
+              "type": "subtasks",
+              "text": null,
+              "value": null
+            },
+            {
+              "id": "status",
+              "type": "status",
+              "text": "Lost",
+              "value": "{\"index\": 1, \"post_id\": null}"
+            },
+            {
+              "id": "dropdown_mkq1sect",
+              "type": "dropdown",
+              "text": "Aviation",
+              "value": "{\"ids\": [1]}"
+            },
+            {
+              "id": "numeric_mkq1val",
+              "type": "numbers",
+              "text": "51000",
+              "value": "\"51000\""
+            },
+            {
+              "id": "date_mkq1crt",
+              "type": "date",
+              "text": "2025-01-07",
+              "value": "{\"date\": \"2025-01-07\"}"
+            },
+            {
+              "id": "text_mkq1own",
+              "type": "text",
+              "text": "OWNER_003",
+              "value": "\"OWNER_003\""
+            }
+          ]
+        },
+        {
+          "id": "1005",
+          "name": "Whale",
+          "column_values": [
+            {
+              "id": "subitems",
+              "type": "subtasks",
+              "text": null,
+              "value": null
+            },
+            {
+              "id": "status",
+              "type": "status",
+              "text": "Won",
+              "value": "{\"index\": 1, \"post_id\": null}"
+            },
+            {
+              "id": "dropdown_mkq1sect",
+              "type": "dropdown",
+              "text": "Energy",
+              "value": "{\"ids\": [1]}"
+            },
+            {
+              "id": "numeric_mkq1val",
+              "type": "numbers",
+              "text": "751000000",
+              "value": "\"751000000\""
+            },
+            {
+              "id": "date_mkq1crt",
+              "type": "date",
+              "text": "2025-03-22",
+              "value": "{\"date\": \"2025-03-22\"}"
+            },
+            {
+              "id": "text_mkq1own",
+              "type": "text",
+              "text": "OWNER_002",
+              "value": "\"OWNER_002\""
+            }
+          ]
+        },
+        {
+          "id": "1006",
+          "name": "Octopus",
+          "column_values": [
+            {
+              "id": "subitems",
+              "type": "subtasks",
+              "text": null,
+              "value": null
+            },
+            {
+              "id": "status",
+              "type": "status",
+              "text": "Won",
+              "value": "{\"index\": 1, \"post_id\": null}"
+            },
+            {
+              "id": "dropdown_mkq1sect",
+              "type": "dropdown",
+              "text": "Tender",
+              "value": "{\"ids\": [1]}"
+            },
+            {
+              "id": "numeric_mkq1val",
+              "type": "numbers",
+              "text": "",
+              "value": null
+            },
+            {
+              "id": "date_mkq1crt",
+              "type": "date",
+              "text": "",
+              "value": null
+            },
+            {
+              "id": "text_mkq1own",
+              "type": "text",
+              "text": "OWNER_004",
+              "value": "\"OWNER_004\""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "account_id": 83990706
+}

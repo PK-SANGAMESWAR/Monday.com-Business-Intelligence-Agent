@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Complexity budget exhausted, query cost 10000, budget remaining 0, reset in 37 seconds.",
+      "extensions": {
+        "code": "COMPLEXITY_BUDGET_EXHAUSTED"
+      }
+    }
+  ]
+}

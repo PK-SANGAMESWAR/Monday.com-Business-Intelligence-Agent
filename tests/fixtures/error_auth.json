@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "Not Authenticated",
+      "extensions": {
+        "code": "AUTHENTICATION_FAILED"
+      }
+    }
+  ],
+  "account_id": null
+}
